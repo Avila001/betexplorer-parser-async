@@ -33,17 +33,7 @@ def get_html(url, params=None):
 def get_href(html):
     """Мы здесь из файла забираем все ссылки. Но можно сделать через последний элемент."""
     mas_current_href = []
-    # if RECORD == 'a':
-    #     with open(LEAGUE, encoding='latin-1') as r_file:
-    #         file_reader = csv.reader(r_file, delimiter=";")
-    #         count = 0
-    #         for row in file_reader:
-    #             if count == 0:
-    #                 print(f'Производится дозапись в текущую таблицу')
-    #             else:
-    #                 mas_current_href.append(row[12])
-    #             count += 1
-    # print(mas_current_href)
+
 
     mas_href = []
     soup = BeautifulSoup(html, 'lxml')
@@ -103,26 +93,10 @@ async def get_match_data(session, url, retry=5) -> list:
     match_data_list.append(list_of_date_names[2])
 
     url_1x2 = extract_1x2(url)
-    # async with session.get(url=url_1x2, headers=HEADERS, raise_for_status=True) as client:
-    #     retry_client = RetryClient(client)
-    #     async with retry_client.get(url_1x2, retry_attempts=10, retry_for_statuses=200) as response:
-    #         page_odds = await response.text()
-    #     await retry_client.close()
-    #     #page_odds = await response.text()
+
     async with session.get(url=url_1x2, headers=HEADERS, ssl=False) as response:
         page_odds = await response.text()
-    # response
-    #     async with session.get(url=url_1x2, headers=HEADERS, ssl=False) as response:
-    #         response_text = await response.text()
-    #     #page_results_of_leagues = get_html(url)
-    # except Exception as ex:
-    #     if retry:
-    #         print(f"[INFO] retry get_odds = {retry} => {url}")
-    #         return get_match_data(session, url, retry=(retry-1))
-    #     else:
-    #         raise f"Ошибка get_odds в {url}"
-    # else:
-    #     list_odds = match.match.Match.get_odds(response_text, list_of_date_names[1], list_of_date_names[2])
+
 
 
     list_odds = match.match.Match.get_odds(page_odds, list_of_date_names[1], list_of_date_names[2])
@@ -131,36 +105,14 @@ async def get_match_data(session, url, retry=5) -> list:
     match_data_list.append(list_odds[2])
 
     url_ah = url_1x2.replace("1x2", "ah")
-    # try:
-    #     async with session.get(url=url_ah, headers=HEADERS, ssl=False) as response:
-    #         page_ah = await response.text()
-    #     #page_results_of_leagues = get_html(url)
-    # except Exception as ex:
-    #     if retry:
-    #         print(f"[INFO] retry get_ah = {retry} => {url}")
-    #         return get_match_data(session, url, retry=(retry-1))
-    #     else:
-    #         raise f"Ошибка get_ah в {url}"
-    # else:
-    #     ah = match.match.Match.get_ah(page_ah)
+
     async with session.get(url=url_ah, headers=HEADERS, ssl=False) as response:
         page_ah = await response.text()
     #page_ah = get_html(url_ah)
     ah = match.match.Match.get_ah(page_ah, url)
 
     url_total = url_1x2.replace("1x2", "ou")
-    # try:
-    #     async with session.get(url=url_total, headers=HEADERS, ssl=False) as response:
-    #         page_total = await response.text()
-    #     #page_results_of_leagues = get_html(url)
-    # except Exception as ex:
-    #     if retry:
-    #         print(f"[INFO] retry get_total = {retry} => {url}")
-    #         return get_match_data(session, url, retry=(retry-1))
-    #     else:
-    #         raise f"Ошибка get_total в {url}"
-    # else:
-    #     total = match.match.Match.get_total(page_total)
+
     async with session.get(url=url_total, headers=HEADERS, ssl=False) as response:
         page_total = await response.text()
     # #page_total = get_html(url_total)
